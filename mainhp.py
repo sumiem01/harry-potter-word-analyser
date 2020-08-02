@@ -16,8 +16,12 @@ def clean_text(text):
     for i in range(226):
         text = text.replace("Page {} of 226".format(i), "")
     for character in "?!,.;…“”’:-—":
-        text = text.replace(character, " ")    
+        text = text.replace(character, " ")
     return text
+
+
+def remove_unnecessary_words():
+    pass
 
 
 def create_words_counter(text):
@@ -47,4 +51,5 @@ if __name__ == "__main__":
     data = data.sort_values(by=['counter'], ascending=False)
     data['length'] = data['words'].apply(len)
     
-    print(data[data['length']>3][:50])
+#    print(data[data['length']>3][:50])
+    print(data[:50])
