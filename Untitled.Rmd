@@ -26,7 +26,7 @@ def read_file(path: str) -> str:
     return full_text
 
 
-def clean_text(text: str, unnecessary_char: str = "?!,.;…“”’:-—") -> str:
+def clean_text(text: str, unnecessary_char: str = "?!,.;…“”‘’:-—()\"") -> str:
     for i in range(226):
         text = text.replace("Page {} of 226".format(i), "")
     for character in unnecessary_char:
@@ -55,14 +55,17 @@ counter = Counter(words)
 
 data = pd.DataFrame(counter.items(), columns=['words', 'counter'])
 data = (data
-       .sort_values(by=['counter'], ascending=False)
-       .assign(length=data['words'].apply(len))
-       .assign(first_letter=data['words'].apply(lambda x: x[0]))
-       .assign(is_palindrom=data['words'].apply(is_palindrom)))
-
-data = data[data['length'] != 1]
-# data[data['is_palindrom']==True]
+        .sort_values(by=['counter'], ascending=False)
+        .assign(length=data['words'].apply(len))
+        .assign(first_letter=data['words'].apply(lambda x: x[0]))
+        .assign(is_palindrom=data['words'].apply(is_palindrom))
+       )
+        
+data.drop(data[data['length'] == 1].index, inplace=True)
 data
+# data[data['first_letter'] == 's']
+# data[data['is_palindrom']==True]
+
 ```
 
 ```{python}
@@ -70,7 +73,7 @@ data.info()
 ```
 
 ```{python}
-data.groupby('first_letter').count().sort_values(by='words', ascending=False)['words']
+data.groupby('first_letter').sum()
 ```
 
 ```{python}
